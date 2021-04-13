@@ -30,6 +30,8 @@ int main()
             a[k][j] /= a[k][k];
         }
         a[k][k] = 1.0;
+        cout << endl;
+        printA(a);
         for (int i = k + 1; i < N; i++)
         {
             for (int j = k + 1; j < N; j++)
