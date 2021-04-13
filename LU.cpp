@@ -38,6 +38,8 @@ int main()
             _mm_storeu_ps(a[k] + j, t1);
         }
         a[k][k] = 1.0;
+        cout << endl;
+        printA(a);
         for (int i = k + 1; i < N; i++)
         {
             for (int j = k + 1; j < N; j += 4)
@@ -50,6 +52,7 @@ int main()
                 _mm_storeu_ps(a[i] + j, t5);
                 //a[i][j] -= a[i][k] * a[k][j];
             }
+
             a[i][k] = 0;
         }
     }
