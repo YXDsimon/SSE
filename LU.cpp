@@ -1,6 +1,6 @@
 #include <iostream>
 using namespace std;
-#define N 5
+#define N 6
 void printA(float a[N][N])
 {
     for (int i = 0; i < N; i++)
@@ -19,7 +19,7 @@ int main()
     {
         for (int j = 0; j < N; j++)
         {
-            a[i][j] = (float)rand() / 10000;
+            a[i][j] = 2 + i + j;
         }
     }
     printA(a);
@@ -37,6 +37,7 @@ int main()
             a[i][k] = 0;
         }
     }
+    cout << endl;
     printA(a);
     return 0;
 }
