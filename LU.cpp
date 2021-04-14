@@ -70,8 +70,8 @@ int main()
                     t4 = _mm_loadu_ps(a[i] + j);
                     t5 = _mm_sub_ps(t4, t3);
                     _mm_storeu_ps(a[i] + j, t5);
-                    cout << endl;
-                    printA(a);
+                    // cout << endl;
+                    // printA(a);
                 }
             }
             a[i][k] = 0;
