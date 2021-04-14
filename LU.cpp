@@ -32,28 +32,48 @@ int main()
         t2 = _mm_loadu_ps(temp);
         for (int j = k + 1; j < N; j += 4)
         {
-            // a[k][j] /= a[k][k];
-            t1 = _mm_loadu_ps(a[k] + j);
-            t1 = _mm_div_ps(t1, t2);
-            _mm_storeu_ps(a[k] + j, t1);
+            if ((N - j) < 4)
+            {
+                for (j; j < N; j += 1)
+                {
+                    a[k][j] /= a[k][k];
+                }
+                break;
+            }
+            else
+            {
+                t1 = _mm_loadu_ps(a[k] + j);
+                t1 = _mm_div_ps(t1, t2);
+                _mm_storeu_ps(a[k] + j, t1);
+            }
         }
         a[k][k] = 1.0;
-        cout << endl;
-        printA(a);
+        // cout << endl;
+        // printA(a);
         for (int i = k + 1; i < N; i++)
         {
             for (int j = k + 1; j < N; j += 4)
             {
-                t1 = _mm_loadu_ps(a[i] + k);
-                t2 = _mm_loadu_ps(a[k] + j);
-                t3 = _mm_mul_ps(t1, t2);
-                t4 = _mm_loadu_ps(a[i] + j);
-                t5 = _mm_sub_ps(t4, t3);
-                _mm_storeu_ps(a[i] + j, t5);
-                //a[i][j] -= a[i][k] * a[k][j];
-            }
+                if ((N - j) < 4)
+                {
+                    for (j; j < N; j += 1)
+                    {
+                        a[i][j] -= a[i][k] * a[k][j];
+                    }
+                    break;
+                }
+                else
+                {
+                    t1 = _mm_loadu_ps(a[i] + k);
+                    t2 = _mm_loadu_ps(a[k] + j);
+                    t3 = _mm_mul_ps(t1, t2);
+                    t4 = _mm_loadu_ps(a[i] + j);
+                    t5 = _mm_sub_ps(t4, t3);
+                    _mm_storeu_ps(a[i] + j, t5);
+                }
 
-            a[i][k] = 0;
+                a[i][k] = 0;
+            }
         }
     }
     cout << endl;
