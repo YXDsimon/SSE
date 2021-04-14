@@ -73,8 +73,8 @@ int main()
                     cout << endl;
                     printA(a);
                 }
-                a[i][k] = 0;
             }
+            a[i][k] = 0;
         }
     }
     cout << endl;
