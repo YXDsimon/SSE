@@ -1,7 +1,7 @@
 #include <iostream>
 #include <immintrin.h>
 using namespace std;
-#define N 6
+#define N 2000
 void printA(float a[N][N])
 {
     for (int i = 0; i < N; i++)
@@ -13,23 +13,12 @@ void printA(float a[N][N])
         cout << endl;
     }
 }
-int main()
+void LU(float **a)
 {
-    float a[N][N];
-    for (int i = 0; i < N; i++) //初始化一个矩阵
-    {
-        for (int j = 0; j < N; j++)
-        {
-            a[i][j] = 2 + j + i;
-        }
-    }
-    printA(a);
     __m128 t1, t2, t3, t4, t5;
     for (int k = 0; k < N; k++)
     {
-        float temp[4];
-        temp[0] = temp[1] = temp[2] = temp[3] = a[k][k];
-        t2 = _mm_loadu_ps(temp);
+        t2 = _mm_load_ps1(a[k] + k);
         for (int j = k + 1; j < N; j += 4)
         {
             if ((N - j) < 4)
@@ -48,8 +37,6 @@ int main()
             }
         }
         a[k][k] = 1.0;
-        // cout << endl;
-        // printA(a);
         for (int i = k + 1; i < N; i++)
         {
             for (int j = k + 1; j < N; j += 4)
@@ -64,20 +51,30 @@ int main()
                 }
                 else
                 {
-                    t1 = _mm_loadu_ps(a[i] + k);
+                    t1 = _mm_load_ps1(a[i] + k); //这里错了
                     t2 = _mm_loadu_ps(a[k] + j);
                     t3 = _mm_mul_ps(t1, t2);
                     t4 = _mm_loadu_ps(a[i] + j);
                     t5 = _mm_sub_ps(t4, t3);
                     _mm_storeu_ps(a[i] + j, t5);
-                    // cout << endl;
-                    // printA(a);
                 }
             }
             a[i][k] = 0;
         }
     }
-    cout << endl;
-    printA(a);
+}
+int main()
+{
+    float **a = new float *[N];
+    for (int i = 0; i < N; i++) //初始化一个矩阵
+    {
+        a[i] = new float[N];
+        for (int j = 0; j < N; j++)
+        {
+            a[i][j] = 2 + j + i;
+        }
+    }
+    LU(a);
+    //printA(a);
     return 0;
 }
