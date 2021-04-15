@@ -51,7 +51,7 @@ void LU(float **a)
                 }
                 else
                 {
-                    t1 = _mm256_set1_ps(a[i][k]); //这里错了
+                    t1 = _mm256_set1_ps(a[i][k]);
                     t2 = _mm256_loadu_ps(a[k] + j);
                     t3 = _mm256_mul_ps(t1, t2);
                     t4 = _mm256_loadu_ps(a[i] + j);
