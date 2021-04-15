@@ -1,7 +1,7 @@
 #include <iostream>
 #include <immintrin.h>
 using namespace std;
-#define N 4000
+#define N 2000
 void printA(float a[N][N])
 {
     for (int i = 0; i < N; i++)
@@ -15,13 +15,13 @@ void printA(float a[N][N])
 }
 void LU(float **a)
 {
-    __m128 t1, t2, t3, t4, t5;
+    __m256 t1, t2, t3, t4, t5;
     for (int k = 0; k < N; k++)
     {
-        t2 = _mm_load_ps1(a[k] + k);
-        for (int j = k + 1; j < N; j += 4)
+        t2 = _mm256_set1_ps(a[k][k]);
+        for (int j = k + 1; j < N; j += 8)
         {
-            if ((N - j) < 4)
+            if ((N - j) < 8)
             {
                 for (j; j < N; j += 1)
                 {
@@ -31,17 +31,17 @@ void LU(float **a)
             }
             else
             {
-                t1 = _mm_loadu_ps(a[k] + j);
-                t1 = _mm_div_ps(t1, t2);
-                _mm_storeu_ps(a[k] + j, t1);
+                t1 = _mm256_loadu_ps(a[k] + j);
+                t1 = _mm256_div_ps(t1, t2);
+                _mm256_storeu_ps(a[k] + j, t1);
             }
         }
         a[k][k] = 1.0;
         for (int i = k + 1; i < N; i++)
         {
-            for (int j = k + 1; j < N; j += 4)
+            for (int j = k + 1; j < N; j += 8)
             {
-                if ((N - j) < 4)
+                if ((N - j) < 8)
                 {
                     for (j; j < N; j += 1)
                     {
@@ -51,12 +51,12 @@ void LU(float **a)
                 }
                 else
                 {
-                    t1 = _mm_load_ps1(a[i] + k); //这里错了
-                    t2 = _mm_loadu_ps(a[k] + j);
-                    t3 = _mm_mul_ps(t1, t2);
-                    t4 = _mm_loadu_ps(a[i] + j);
-                    t5 = _mm_sub_ps(t4, t3);
-                    _mm_storeu_ps(a[i] + j, t5);
+                    t1 = _mm256_set1_ps(a[i][k]); //这里错了
+                    t2 = _mm256_loadu_ps(a[k] + j);
+                    t3 = _mm256_mul_ps(t1, t2);
+                    t4 = _mm256_loadu_ps(a[i] + j);
+                    t5 = _mm256_sub_ps(t4, t3);
+                    _mm256_storeu_ps(a[i] + j, t5);
                 }
             }
             a[i][k] = 0;

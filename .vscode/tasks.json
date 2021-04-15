@@ -8,6 +8,7 @@
                 "-g",
                 "${file}",
                 "-o",
+                "-mavx",
                 "${fileDirname}\\${fileBasenameNoExtension}.exe"
             ],
             "options": {

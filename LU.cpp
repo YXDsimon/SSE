@@ -1,6 +1,6 @@
 #include <iostream>
 using namespace std;
-#define N 4000
+#define N 2000
 void printA(float a[N][N])
 {
     for (int i = 0; i < N; i++)
