@@ -1,7 +1,7 @@
 #include <iostream>
 #include <immintrin.h>
 using namespace std;
-#define N 2000
+#define N 4000
 void printA(float a[N][N])
 {
     for (int i = 0; i < N; i++)
